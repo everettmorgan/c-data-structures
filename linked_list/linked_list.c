@@ -6,12 +6,20 @@
 #define IS_FULL  2
 #define NOT_FND  3
 
+// linked_list: a collection of elements
+// @h : pointer to the head node in the list
+// @num_ns : number of nodes in the list
+// @max_sz : (optional) defines a max size for the list, used with stacks
 struct linked_list {
   struct node *h;
   int num_ns;
   int max_sz;
 };
 
+// node : an element in a linked list
+// @d : stored data
+// @n : pointer to the next node
+// @p : pointer to the previous node
 struct node {
   int d;
   struct node *n;
