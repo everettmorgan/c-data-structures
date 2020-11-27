@@ -1,4 +1,4 @@
-#include "linked_list.h"
+#include "../linked_list.h"
 
 int main() {
   struct linked_list ll = {};
@@ -9,8 +9,7 @@ int main() {
   insert(&ll, 'o');
   print_linked_list(&ll);
 
-  struct node *n = NULL;
-  find(&ll, 'o', n);
+  struct node *n = find(&ll, 'o');
   printf("found: %d\n", n->d);
 
   delete_by_val(&ll, 'y');
