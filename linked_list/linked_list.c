@@ -29,17 +29,16 @@ struct node {
 // find : traverses the linked list and return a pointer to the
 // first node that matches the data parameter. find() will return
 // NULL if no node is found to match the data parameter.
-int find(struct linked_list *ll, struct node *ref, int data) {
+static struct node *find(struct linked_list *ll, int data) {
   struct node *cn = ll->h;
   while (cn->d != data) {
-    if (cn->n == NULL) return NOT_FND;
+    if (cn->n == NULL) return NULL;
   }
-  ref = cn;
-  return SUCCESS;
+  return cn;
 }
 
 // delete_head : removes the head node from the linked list
-int delete_head(struct linked_list *ll) {
+static int delete_head(struct linked_list *ll) {
   if (ll->h == NULL) return IS_EMPTY;
   if (ll->h->n != NULL) {
     ll->h = ll->h->n;
@@ -53,7 +52,7 @@ int delete_head(struct linked_list *ll) {
 // parameter against a node in the linked list, and dereferences
 // it from it's neighbors. delete_by_val() will return 1 if no
 // no matches the data parameter.
-int delete_by_val(struct linked_list *ll, int data) {
+static int delete_by_val(struct linked_list *ll, int data) {
   if (ll->h == NULL) return IS_EMPTY;
 
   struct node *prev = NULL;
@@ -75,7 +74,7 @@ int delete_by_val(struct linked_list *ll, int data) {
 }
 
 // insert : inserts a node at the start of a linked list
-int insert(struct linked_list *ll, int data) {
+static int insert(struct linked_list *ll, int data) {
   if (ll->max_sz != 0 && ll->num_ns == ll->max_sz)
     return IS_FULL;
 
