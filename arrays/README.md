@@ -6,6 +6,8 @@ a collection of elements that are of the same type.
 
 It's important to note that C treats any array as a pointer to the first element in that array.
 
+---
+
 ## Exercises
 
 1. Find the second minimum element of an array ☑
@@ -14,6 +16,8 @@ It's important to note that C treats any array as a pointer to the first element
 4. Rearrange positive and negative values in an array
 
 The above Exercises have their own sub-directories with compiled binaries for the Mac + a README walking through the algorithm. You'll need to recompile the binaries for your specific system as needed.
+
+---
 
 ## Example code
 
