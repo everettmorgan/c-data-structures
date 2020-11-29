@@ -1,7 +1,7 @@
 #include "../linked_list.h"
 
 int main() {
-  struct linked_list ll = {};
+  linked_list ll = {};
   insert(&ll, 'h');
   insert(&ll, 'e');
   insert(&ll, 'l');
@@ -9,7 +9,7 @@ int main() {
   insert(&ll, 'o');
   print_linked_list(&ll);
 
-  struct node *n = find(&ll, 'l');
+  node *n = find(&ll, 'l');
   if (n != NULL)
     printf("found: %d\n", n->d);
 

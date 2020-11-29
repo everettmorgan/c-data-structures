@@ -10,7 +10,7 @@ int pop(stack *stk) {
   return delete_head(stk);
 }
 
-struct node *peek(stack *stk) {
+node *peek(stack *stk) {
   return stk->h;
 }
 
