@@ -14,7 +14,7 @@ int main() {
   pop(&s);
   pop(&s);
 
-  struct node *h = peek(&s);
+  node *h = peek(&s);
   printf("head: %p\n\n", h);
 
   print_stack(&s);
