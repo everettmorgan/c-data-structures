@@ -50,7 +50,7 @@ int main() {
   int d[ARRAY_LEN] = {1,1,2,2,22,PADD}; // even
   int t[ARRAY_LEN] = {1,1,1,2,2,2,22,3,3,PADD}; // odd
   int s[ARRAY_LEN] = {22,1,1,2,2,3,PADD}; // start
-  int e[ARRAY_LEN] = {1,1,2,2,3,3,22,PADD}; // start
+  int e[ARRAY_LEN] = {1,1,2,2,3,3,22,PADD}; // end
 
   int dnrep = ff_non_rep(d);
   int tnrep = ff_non_rep(t);
