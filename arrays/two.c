@@ -1,19 +1,29 @@
 #include<stdio.h>
 
-// Find first non-repeating integers of an array
+// 2. Find first non-repeating integers of an array
 
-#define ARRAY_LEN 15
 #define PADD      -1
 
 // ff_non_rep (find first non-repeating) : traverses an array until it
-// finds the first non-repeating character. ff_non_rep() will return -1
-// if no non-repeating integer is found in the given array. ff_non_rep() expects
-// incoming arrays to terminate themselves with -1 or the PADD symbolic link.
+// finds the first non-repeating character or PADD terminal. ff_non_rep() will
+// return -1 if no non-repeating integer is found in the given array.
+// ff_non_rep() expects incoming arrays to terminate themselves with -1 or the
+// PADD symbolic link.
 int ff_non_rep(int a[]) {
   int prev, nrep;
 
-  for (int i=0; i < ARRAY_LEN; i++) {
-    if (ARRAY_LEN < 2) nrep = a[i];
+  for (int i=0; a[i] != PADD; i++) {
+    // empty or PADD-only array
+    if (a[i] == PADD) {
+      nrep = -1;
+      break;
+    }
+
+    // return array if there's only 1 element
+    if (a[i+1] == PADD) {
+      nrep = a[i];
+      break;
+    }
 
     // start of the array (setup)
     if (i == 0) {
@@ -47,10 +57,10 @@ int ff_non_rep(int a[]) {
 }
 
 int main() {
-  int d[ARRAY_LEN] = {1,1,2,2,22,PADD}; // even
-  int t[ARRAY_LEN] = {1,1,1,2,2,2,22,3,3,PADD}; // odd
-  int s[ARRAY_LEN] = {22,1,1,2,2,3,PADD}; // start
-  int e[ARRAY_LEN] = {1,1,2,2,3,3,22,PADD}; // end
+  int d[] = {1,1,2,2,22,PADD}; // even
+  int t[] = {1,1,1,2,2,2,22,3,3,PADD}; // odd
+  int s[] = {22,1,1,2,2,3,PADD}; // start
+  int e[] = {1,1,2,2,3,3,22,PADD}; // end
 
   int dnrep = ff_non_rep(d);
   int tnrep = ff_non_rep(t);
