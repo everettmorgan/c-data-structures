@@ -6,10 +6,11 @@
 // - Find − find an element using given key.
 // - Delete − delete an element using given key.
 
-static int insert(struct linked_list *ll, int data);
-static struct node *find(struct linked_list *ll, int data);
+static int insert(linked_list *ll, int data);
+static struct node *find(linked_list *ll, int data);
 
-static int delete_head(struct linked_list *ll);
-static int delete_by_val(struct linked_list *ll, int data);
+static int delete_head(linked_list *ll);
+static int delete_by_val(linked_list *ll, int data);
 
-void print_linked_list(struct linked_list *ll);
+void print_linked_list(linked_list *ll);
+void free_linked_list(linked_list *ll);

@@ -10,35 +10,36 @@
 // @h : pointer to the head node in the list
 // @num_ns : number of nodes in the list
 // @max_sz : (optional) defines a max size for the list, used with stacks
-struct linked_list {
+typedef struct linked_list {
   struct node *h;
   int num_ns;
   int max_sz;
-};
+} linked_list;
 
 // node : an element in a linked list
 // @d : stored data
 // @n : pointer to the next node
 // @p : pointer to the previous node
-struct node {
+typedef struct node {
   int d;
   struct node *n;
   struct node *p;
-};
+} node;
 
 // find : traverses the linked list and return a pointer to the
 // first node that matches the data parameter. find() will return
 // NULL if no node is found to match the data parameter.
-static struct node *find(struct linked_list *ll, int data) {
-  struct node *cn = ll->h;
+static node *find(linked_list *ll, int data) {
+  node *cn = ll->h;
   while (cn->d != data) {
     if (cn->n == NULL) return NULL;
+    cn = cn->n;
   }
   return cn;
 }
 
 // delete_head : removes the head node from the linked list
-static int delete_head(struct linked_list *ll) {
+static int delete_head(linked_list *ll) {
   if (ll->h == NULL) return IS_EMPTY;
   if (ll->h->n != NULL) {
     ll->h = ll->h->n;
@@ -52,11 +53,11 @@ static int delete_head(struct linked_list *ll) {
 // parameter against a node in the linked list, and dereferences
 // it from it's neighbors. delete_by_val() will return 1 if no
 // no matches the data parameter.
-static int delete_by_val(struct linked_list *ll, int data) {
+static int delete_by_val(linked_list *ll, int data) {
   if (ll->h == NULL) return IS_EMPTY;
 
-  struct node *prev = NULL;
-  struct node *cn = ll->h;
+  node *prev = NULL;
+  node *cn = ll->h;
   while (cn->d != data) {
     if (cn->n == NULL) return 1;
     prev = cn;
@@ -74,11 +75,11 @@ static int delete_by_val(struct linked_list *ll, int data) {
 }
 
 // insert : inserts a node at the start of a linked list
-static int insert(struct linked_list *ll, int data) {
+static int insert(linked_list *ll, int data) {
   if (ll->max_sz != 0 && ll->num_ns == ll->max_sz)
     return IS_FULL;
 
-  struct node *n = (struct node*)malloc(sizeof(struct node));
+  node *n = (node*)malloc(sizeof(node));
   n->d = data;
   n->n = ll->h;
   ll->h = n;
@@ -89,8 +90,8 @@ static int insert(struct linked_list *ll, int data) {
 // print_linked_list : pretty prints a linked list to the
 // console. It will display the node address, it's data propterty
 // and the next node's address.
-void print_linked_list(struct linked_list *ll) {
-  struct node *cn = ll->h;
+void print_linked_list(linked_list *ll) {
+  node *cn = ll->h;
   while(cn != NULL) {
     printf("addr :%p", cn);
     printf(" data: %d\n", cn->d);
@@ -99,4 +100,14 @@ void print_linked_list(struct linked_list *ll) {
   }
 
   printf("\n");
+}
+
+// free_linked_list : frees the all nodes in the list from the heap.
+void free_linked_list(linked_list *ll) {
+  node *cn = ll->h;
+  while(cn != NULL) {
+    node *next = cn->n;
+    free(cn);
+    cn = next;
+  }
 }
