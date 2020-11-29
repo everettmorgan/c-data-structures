@@ -16,6 +16,13 @@ typedef struct linked_list {
   int max_sz;
 } linked_list;
 
+// new_linked_list : returns a pointer to a newly allocated linked list.
+linked_list *new_linked_list(int max_size) {
+  linked_list *ll = (linked_list *)malloc(sizeof(linked_list));
+  if (max_size > 0) ll->max_sz = max_size;
+  return ll;
+}
+
 // node : an element in a linked list
 // @d : stored data
 // @n : pointer to the next node
@@ -25,6 +32,12 @@ typedef struct node {
   struct node *n;
   struct node *p;
 } node;
+
+// new_node : returns a pointer to a newly allocated node.
+node *new_node() {
+  node *n = (node *)malloc(sizeof(node));
+  return n;
+}
 
 // find : traverses the linked list and return a pointer to the
 // first node that matches the data parameter. find() will return
@@ -102,7 +115,7 @@ void print_linked_list(linked_list *ll) {
   printf("\n");
 }
 
-// free_linked_list : frees the all nodes in the list from the heap.
+// free_linked_list : frees all nodes and the parent linked list from the heap.
 void free_linked_list(linked_list *ll) {
   node *cn = ll->h;
   while(cn != NULL) {
@@ -110,4 +123,5 @@ void free_linked_list(linked_list *ll) {
     free(cn);
     cn = next;
   }
+  free(ll);
 }

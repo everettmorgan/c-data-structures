@@ -6,6 +6,9 @@
 // - Find − find an element using given key.
 // - Delete − delete an element using given key.
 
+linked_list *new_linked_list();
+node *new_node();
+
 static int insert(linked_list *ll, int data);
 static struct node *find(linked_list *ll, int data);
 
