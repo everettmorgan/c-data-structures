@@ -44,15 +44,13 @@ int ff_non_rep(int a[]) {
         }
       }
     }
-
     prev = a[i];
   }
-
   return nrep;
 }
 
 int main() {
-  // valid
+  printf("== valid ===\n");
   int o1[] = {22,-1}; // -1 terminal
   int o2[] = {22,PADD}; // one
   int d[] = {1,1,2,2,22,PADD}; // even
@@ -67,7 +65,6 @@ int main() {
   int snrep = ff_non_rep(s);
   int enrep = ff_non_rep(e);
 
-  printf("== valid ===\n");
   printf("o1nrep: %d\n", o1nrep);
   printf("o2nrep: %d\n", o2nrep);
   printf("dnrep: %d\n", dnrep);
