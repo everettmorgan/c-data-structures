@@ -10,6 +10,11 @@
 // - Find − find an element using given key.
 // - Delete − delete an element using given key.
 
+// flags to specific linked list type at creation
+extern const linked_list_type SING_LL; // default
+extern const linked_list_type DOUB_LL;
+extern const linked_list_type CIRC_LL;
+
 linked_list *new_linked_list();
 node *new_node();
 

@@ -5,7 +5,7 @@
 #include "../linked_list.h"
 
 int main() {
-  linked_list *ll = new_linked_list(5);
+  linked_list *ll = new_linked_list(SING_LL, 5);
   insert(ll, 'h');
   insert(ll, 'e');
   insert(ll, 'l');
