@@ -32,9 +32,11 @@ int ff_non_rep(int a[]) {
 
     // main check for all other elements
     if (a[i] != prev) {
-      if (a[i+1] != a[i] && a[i+1] != prev) {
-        nrep = a[i];
-        break;
+      if (a[i] != PADD) {
+        if (a[i+1] != prev && a[i+1] != a[i]) {
+          nrep = a[i];
+          break;
+        }
       }
     }
 
