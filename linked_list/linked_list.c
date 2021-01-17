@@ -47,10 +47,12 @@ linked_list_node * linked_list_node_new(void * d) {
 void linked_list_free(linked_list *ll) {
   linked_list_node * cn = ll->head;
   linked_list_node * next = NULL;
-  while (cn != NULL) {
+  int i = 0;
+  while (cn != NULL && i < ll->length) {
     next = cn->next;
     free(cn);
     cn = next;
+    i++;
   }
   free(ll);
 }
@@ -195,6 +197,7 @@ int linked_list_delete_circly(linked_list * ll, linked_list_node * node) {
 
 // delete_node : safely removes a node from it's linked list.
 int linked_list_delete(linked_list * ll, linked_list_node * n) {
+  printf("%p\n", n);
   if (linked_list_is_empty(ll))
     return 1;
   if (ll->type == 0)
@@ -203,7 +206,6 @@ int linked_list_delete(linked_list * ll, linked_list_node * n) {
     linked_list_delete_doubly(ll, n);
   else if (ll->type == 2)
     linked_list_delete_circly(ll, n);
-  ll->length -= 1;
   return 0;
 }
 
@@ -233,11 +235,12 @@ void linked_list_equality_fn(linked_list *ll, void (*equal)) {
 void linked_list_print(linked_list * ll) {
   linked_list_node * cn = ll->head;
   int i = 0;
-  while (cn != NULL) {
+  while (cn != NULL && i < ll->length) {
     printf("addr :%p", cn);
     printf("\tnext: %p", cn->next);
     printf("\tprev: %p\n", cn->prev);
     cn = cn->next;
+    i++;
   }
   printf("**++**\n");
 }
