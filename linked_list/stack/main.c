@@ -4,24 +4,23 @@
 
 #include "stack.h"
 
-
-
 int main() {
-  stack *s = new_stack(5);
-  push(s, 'h');
-  push(s, 'e');
-  push(s, 'l');
-  push(s, 'l');
-  push(s, 'o');
+  stack *s = stack_new(5);
+  stack_push(s, (char *)'h');
+  stack_push(s, (char *)'e');
+  stack_push(s, (char *)'l');
+  stack_push(s, (char *)'l');
+  stack_push(s, (char *)'o');
 
-  print_stack(s);
+  stack_print(s);
 
-  pop(s);
-  pop(s);
-  pop(s);
+  stack_pop(s);
+  stack_pop(s);
+  stack_pop(s);
 
-  node *h = peek(s);
+  stack_node *h = stack_peek(s);
   printf("head: %p\n\n", h);
 
-  print_stack(s);
+  stack_print(s);
+  stack_free(s);
 }
