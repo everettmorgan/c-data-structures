@@ -1,4 +1,4 @@
-# Learning Data Structures using C!
+# Learning Data Structures using C
 
 **What's this repo for?**
 I started this repo to take notes on common data structures and implement them using C. Why C, you ask? Well, why not? I've only recently started programming in C and can say it's really fun to learn about the low level stuff. Especially when you're trying to optimize or better understand a higher level problem/implementation.
@@ -7,12 +7,12 @@ Each subdirectory will focus on a particular data structure and will also includ
 
 **NOTE:** if you find a better way of doing something, or just a plain bug please submit a PR — I appreciate the feedback and help!
 
----
-
 **Upcoming or In Progress**
 
 - [] Array ~
-- [] Linked Lists ~
+- [x] Stack
+- [] Queue
+- [x] Linked Lists
 - [] Hash Table
 - [] Binary Tree
 
