@@ -26,7 +26,7 @@ int main() {
   linked_list_print(ll);
 
   linked_list_delete_value(ll, &(Shape){5,5});
-  // linked_list_delete(ll, linked_list_find(ll, &rectangle));
+  linked_list_delete(ll, linked_list_find(ll, &rectangle));
   linked_list_print(ll);
 
   linked_list_free(ll);

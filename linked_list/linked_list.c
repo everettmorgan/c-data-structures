@@ -197,7 +197,6 @@ int linked_list_delete_circly(linked_list * ll, linked_list_node * node) {
 
 // delete_node : safely removes a node from it's linked list.
 int linked_list_delete(linked_list * ll, linked_list_node * n) {
-  printf("%p\n", n);
   if (linked_list_is_empty(ll))
     return 1;
   if (ll->type == 0)
