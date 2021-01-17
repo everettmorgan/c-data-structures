@@ -9,12 +9,12 @@ Each subdirectory will focus on a particular data structure and will also includ
 
 **Upcoming or In Progress**
 
-- [] Array ~
+- [ ] Array ~
 - [x] Stack
-- [] Queue
+- [ ] Queue
 - [x] Linked Lists
-- [] Hash Table
-- [] Binary Tree
+- [ ] Hash Table
+- [ ] Binary Tree
 
 **Questions or suggestions?**
 
