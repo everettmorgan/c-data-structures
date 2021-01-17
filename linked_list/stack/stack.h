@@ -2,26 +2,40 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-#include "../linked_list.h"
+#include "../linked_list/linked_list.h"
 
-typedef linked_list stack;
+typedef linked_list_node stack_node;
 
-stack *new_stack(int max_sz) {
-  return new_linked_list(SING_LL, max_sz);
+typedef struct stack {
+    linked_list *ll;
+    int max_length;
+    int length;
+} stack;
+
+stack *stack_new(int max_length) {
+    stack *s = malloc(sizeof(stack));
+    s->ll = linked_list_new(0);
+    s->max_length = max_length;
+    return s;
 }
 
-void push(stack *stk, int d) {
-  insert((linked_list *)stk, d);
+void stack_push(stack *stk, void *data) {
+    linked_list_insert(stk->ll, linked_list_node_new(&data));
 }
 
-void pop(stack *stk) {
-  delete_head((linked_list *)stk);
+void stack_pop(stack *stk) {
+    linked_list_delete(stk->ll, stk->ll->head);
 }
 
-node *peek(stack *stk) {
-  return stk->h;
+linked_list_node *stack_peek(stack *stk) {
+    return stk->ll->head;
 }
 
-void print_stack(stack *stk) {
-  print_linked_list((linked_list *)stk);
+void stack_print(stack *stk) {
+    linked_list_print(stk->ll);
+}
+
+void stack_free(stack *stk) {
+    linked_list_free(stk->ll);
+    free(stk);
 }

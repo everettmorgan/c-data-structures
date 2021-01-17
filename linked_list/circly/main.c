@@ -11,15 +11,19 @@ typedef struct Shape {
 LINKED_LIST_EQUALITY(shape, Shape, (a->l == b->l) && (a->w == b->l));
 
 int main() {
-  linked_list *ll = linked_list_new(0);
+  linked_list *ll = linked_list_new(2);
   linked_list_equality_fn(ll, shape_equality);
 
   Shape square = { 5, 5 };
   Shape rectangle = { 5, 4 };
+  Shape rectangle2 = { 6, 7 };
+  Shape rectangle3 = { 12, 23 };
 
   linked_list_insert(ll, linked_list_node_new(&square));
   linked_list_insert(ll, linked_list_node_new(&rectangle));
-  linked_list_print(ll);
+  linked_list_insert(ll, linked_list_node_new(&rectangle2));
+  linked_list_insert(ll, linked_list_node_new(&rectangle3));
+  // linked_list_print(ll);
 
   linked_list_delete_value(ll, &(Shape){5,5});
   linked_list_delete(ll, linked_list_find(ll, &rectangle));

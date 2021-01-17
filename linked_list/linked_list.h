@@ -4,25 +4,22 @@
 
 #include "linked_list.c"
 
-// - Insertion − add an element at the beginning of the list.
-// - Deletion − delete an element at the beginning of the list.
-// - Display − displaying complete list.
-// - Find − find an element using given key.
-// - Delete − delete an element using given key.
+#define LINKED_LIST_EQUALITY(name,typ,comp) \
+  int name##_equality(void *y, void *z) { \
+    typ *a = y, *b = z; \
+    return (comp) ? 1 : 0; \
+  } \
 
-// flags to specific linked list type at creation
-extern const linked_list_type SING_LL; // default
-extern const linked_list_type DOUB_LL;
-extern const linked_list_type CIRC_LL;
+linked_list *linked_list_new(int type);
+linked_list_node *linked_list_node_new(void *d);
 
-linked_list *new_linked_list();
-node *new_node();
+linked_list_node *linked_list_find(linked_list *ll, void *v);
+void linked_list_insert(linked_list *ll, linked_list_node *n);
+int linked_list_delete(linked_list *ll, linked_list_node *n);
+int linked_list_delete_value(linked_list *ll, void *v);
 
-static int insert(linked_list *ll, int data);
-static struct node *find(linked_list *ll, int data);
+void linked_list_compare_fn(linked_list *ll, void(*cmp));
+void linked_list_equality_fn(linked_list *ll, void(*equal));
 
-static int delete_head(linked_list *ll);
-static int delete_by_val(linked_list *ll, int data);
-
-void print_linked_list(linked_list *ll);
-void free_linked_list(linked_list *ll);
+void linked_list_free(linked_list *ll);
+void linked_list_print(linked_list *ll);

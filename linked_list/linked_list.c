@@ -2,167 +2,242 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-#include<stdio.h>
-#include<stdlib.h>
+#include<stdio.h> // printf
+#include<stdlib.h> // malloc
 
-#define SUCCESS  0
-#define IS_EMPTY 1
-#define IS_FULL  2
-#define NOT_FND  3
+// node : an element in a linked list
+typedef struct linked_list_node {
+  void * data;
+  struct linked_list_node * next;
+  struct linked_list_node * prev;
+} linked_list_node;
 
-typedef int linked_list_type;
-
-const linked_list_type SING_LL = 0;
-const linked_list_type DOUB_LL = 1;
-const linked_list_type CIRC_LL = 2;
-
-// linked_list: a collection of elements
-// @h : pointer to the head node in the list
-// @num_ns : number of nodes in the list
-// @max_sz : (optional) defines a max size for the list, used with stacks
+// linked_list: a collection of nodes
 typedef struct linked_list {
-  struct node *h;
-  int num_ns;
-  int max_sz;
-  linked_list_type typ;
+  struct linked_list_node *head;
+  struct linked_list_node *tail;
+  int length;
+  int type;
+  int (* cmp_fn)(void *, void *);
+  int (* eq_fn)(void *, void *);
 } linked_list;
 
 // new_linked_list : returns a pointer to a newly allocated linked list.
-linked_list *new_linked_list(linked_list_type lt, int max_size) {
-  linked_list *ll = (linked_list *)malloc(sizeof(linked_list));
-  if (max_size > 0) ll->max_sz = max_size;
-  if (lt > 0) ll->typ = lt;
+linked_list * linked_list_new(int type) {
+  linked_list * ll = malloc(sizeof(linked_list));
+  ll->type = type;
+  ll->length = 0;
+  ll->head = NULL;
+  ll->tail = NULL;
+  ll->cmp_fn = NULL;
+  ll->eq_fn = NULL;
   return ll;
 }
 
-// node : an element in a linked list
-// @d : stored data
-// @n : pointer to the next node
-// @p : pointer to the previous node
-typedef struct node {
-  int d;
-  struct node *n;
-  struct node *p;
-} node;
-
 // new_node : returns a pointer to a newly allocated node.
-node *new_node() {
-  node *n = (node *)malloc(sizeof(node));
+linked_list_node * linked_list_node_new(void * d) {
+  linked_list_node * n = malloc(sizeof(linked_list_node));
+  n->data = d;
+  n->next = NULL;
+  n->prev = NULL;
   return n;
 }
 
-// find : traverses the linked list and return a pointer to the
-// first node that matches the data parameter. find() will return
-// NULL if no node is found to match the data parameter.
-static node *find(linked_list *ll, int data) {
-  node *cn = ll->h;
-  while (cn->d != data) {
-    if (cn->n == NULL) return NULL;
-    cn = cn->n;
-  }
-  return cn;
-}
-
-// delete_head : removes the head node from the linked list
-static int delete_head(linked_list *ll) {
-  if (ll->h == NULL) return IS_EMPTY;
-  if (ll->h->n != NULL) {
-    ll->h = ll->h->n;
-  } else {
-    ll->h = NULL;
-  }
-  return SUCCESS;
-}
-
-// delete_by_val : traverses the linked list, matches the data
-// parameter against a node in the linked list, and dereferences
-// it from it's neighbors. delete_by_val() will return 1 if no
-// no matches the data parameter.
-static int delete_by_val(linked_list *ll, int data) {
-  if (ll->h == NULL) return IS_EMPTY;
-
-  node *prev = NULL;
-  node *cn = ll->h;
-  while (cn->d != data) {
-    if (cn->n == NULL) return 1;
-    prev = cn;
-    cn = cn->n;
-  }
-
-  if (cn == ll->h) {
-    delete_head(ll);
-    return SUCCESS;
-  }
-
-  prev->n = cn->n;
-  cn->n = NULL;
-  return SUCCESS;
-}
-
-// singly_insert : handles inserting into a singly_linked_list
-static void _singly_insert(linked_list *ll, int data) {
-  node *n = (node*)malloc(sizeof(node));
-  n->d = data;
-  n->n = ll->h;
-  ll->h = n;
-  ll->num_ns++;
-}
-
-// doubly_insert : handles inserting into a doubly_linked_list
-static void _doubly_insert(linked_list *ll, int data) {
-
-}
-
-// circular : handles inserting into a circular_linked_list
-static void _circular_insert(linked_list *ll, int data) {
-
-}
-
-// insert : inserts a node at the start of a linked list
-static int insert(linked_list *ll, int data) {
-  if (ll->max_sz != 0 && ll->num_ns == ll->max_sz)
-    return IS_FULL;
-
-  switch (ll->typ) {
-    case SING_LL:
-      _singly_insert(ll, data);
-      break;
-    case DOUB_LL:
-      _doubly_insert(ll, data);
-      break;
-    case CIRC_LL:
-      _circular_insert(ll, data);
-      break;
-    default: // invalid: default to singly
-      _singly_insert(ll, data);
-      break;
-  }
-
-  return SUCCESS;
-}
-
-// print_linked_list : pretty prints a linked list to the
-// console. It will display the node address, it's data propterty
-// and the next node's address.
-void print_linked_list(linked_list *ll) {
-  node *cn = ll->h;
-  while(cn != NULL) {
-    printf("addr :%p", cn);
-    printf(" data: %d\n", cn->d);
-    printf(" next: %p\n", cn->n);
-    cn = cn->n;
-  }
-
-  printf("\n");
-}
-
-// free_linked_list : frees all nodes and the parent linked list from the heap.
-void free_linked_list(linked_list *ll) {
-  node *cn = ll->h;
-  while(cn != NULL) {
-    node *next = cn->n;
+// free_linked_list : frees all nodes and the parent linked list from the stack.
+void linked_list_free(linked_list *ll) {
+  linked_list_node * cn = ll->head;
+  linked_list_node * next = NULL;
+  while (cn != NULL) {
+    next = cn->next;
     free(cn);
     cn = next;
   }
   free(ll);
+}
+
+/* find_node : traverses a linked list using the user defined check_func()
+* function. find_node() expects check_func() to return a 0 for no match
+* and any positive integer for a match.
+*/
+linked_list_node * linked_list_find(linked_list * ll, void * v) {
+  linked_list_node * curr = ll->head;
+  int i = 0;
+  while (curr != NULL && i < ll->length) {
+    if (ll->eq_fn(curr->data, v)) {
+      return curr;
+    }
+    curr = curr->next;
+    i += 1;
+  }
+  return NULL;
+}
+
+// insert : inserts a node into the linked list.
+void linked_list_insert(linked_list * ll, linked_list_node * n) {
+  if (ll->length == 0) {
+    ll->head = n;
+    ll->tail = n;
+  }
+  else {
+    switch (ll->type) {
+    case 0:
+      ll->tail->next = n;
+      ll->tail = n;
+      break;
+    case 1:
+      ll->tail->next = n;
+      n->prev = ll->tail;
+      ll->tail = n;
+      break;
+    case 2:
+      ll->tail->next = n;
+      n->prev = ll->tail;
+      ll->tail = n;
+      ll->head->prev = ll->tail;
+      ll->tail->next = ll->head;
+      break;
+    }
+  }
+
+  ll->length += 1;
+}
+
+/* is_empty : returns whether or not a linked list is empty or not.
+* is_empty() will return 1 if a linked list is empty and 0 if it isn't.
+*/
+int linked_list_is_empty(linked_list * ll) {
+  return (ll->length < 1);
+}
+
+int linked_list_delete_singly(linked_list * ll, linked_list_node * n) {
+  linked_list_node * curr = ll->head;
+  while (curr != NULL) {
+    if (&(curr->data) == &(n->data)) {
+      if (curr == ll->head) {
+        ll->head = curr->next;
+      }
+      else if (curr == ll->tail) {
+        ll->tail = ll->tail->prev;
+        ll->tail->next = NULL;
+      }
+      else {
+        if (curr->next != NULL)
+          curr->next->prev = curr->prev;
+        if (curr->prev != NULL)
+          curr->prev->next = curr->next;
+      }
+      free(curr);
+      ll->length -= 1;
+      return 1;
+   }
+   curr = curr->next;
+  }
+  return 0;
+}
+
+int linked_list_delete_doubly(linked_list * ll, linked_list_node * node) {
+  linked_list_node * curr = ll->head;
+  while (curr != NULL) {
+    if (&(curr->data) == &(node->data)){
+      if (curr == ll->head) {
+        ll->head = curr->next;
+        ll->head->prev = NULL;
+      }
+      else if (curr == ll->tail) {
+        ll->tail = curr->prev;
+        ll->tail->next = NULL;
+      }
+      else {
+        if (curr->next != NULL) {
+          curr->next->prev = curr->prev;
+        }
+        if (curr->prev != NULL) {
+          curr->prev->next = curr->next;
+        }
+      }
+      free(curr);
+      ll->length -= 1;
+      return 0;
+    }
+    curr = curr->next;
+  }
+  return 1;
+}
+
+int linked_list_delete_circly(linked_list * ll, linked_list_node * node) {
+  linked_list_node * curr = ll->head;
+  int i = 0;
+  while (curr != NULL && i < ll->length) {
+    if (&(curr->data) == &(node->data)) {
+      if (curr == ll->head) {
+        ll->head = curr->next;
+        ll->tail->next = ll->head;
+        ll->head->prev = ll->tail;
+      }
+      else if (curr == ll->tail) {
+        ll->tail = ll->tail->prev;
+        ll->tail->next = ll->head;
+        ll->head->prev = ll->tail;
+      }
+      else {
+        curr->prev->next = curr->next;
+        curr->next->prev = curr->prev;
+      }
+      free(curr);
+      ll->length -= 1;
+      return 0;
+    }
+    curr = curr->next;
+    i += 1;
+  }
+  return 1;
+}
+
+// delete_node : safely removes a node from it's linked list.
+int linked_list_delete(linked_list * ll, linked_list_node * n) {
+  if (linked_list_is_empty(ll))
+    return 1;
+  if (ll->type == 0)
+    linked_list_delete_singly(ll, n);
+  else if (ll->type == 1)
+    linked_list_delete_doubly(ll, n);
+  else if (ll->type == 2)
+    linked_list_delete_circly(ll, n);
+  ll->length -= 1;
+  return 0;
+}
+
+/* delete_by_val : traverses the linked list, matches the data
+* parameter against a node in the linked list, and dereferences
+* it from it's neighbors. delete_by_val() will return 1 if no
+* no matches the data parameter.
+*/
+int linked_list_delete_value(linked_list * ll, void * v) {
+  if (linked_list_is_empty(ll)) return 1;
+  linked_list_node * node = linked_list_find(ll, v);
+  linked_list_delete(ll, node);
+  return 0;
+}
+
+void linked_list_compare_fn(linked_list * ll, void (* cmp)) {
+    ll->cmp_fn = cmp;
+}
+
+void linked_list_equality_fn(linked_list *ll, void (*equal)) {
+    ll->eq_fn = equal;
+}
+
+/* print_linked_list : pretty prints a linked list to the console. It will
+* display the node address, it's data propterty and the next node's address.
+* */
+void linked_list_print(linked_list * ll) {
+  linked_list_node * cn = ll->head;
+  int i = 0;
+  while (cn != NULL) {
+    printf("addr :%p", cn);
+    printf("\tnext: %p", cn->next);
+    printf("\tprev: %p\n", cn->prev);
+    cn = cn->next;
+  }
+  printf("**++**\n");
 }
