@@ -11,10 +11,11 @@ Each subdirectory will focus on a particular data structure and will also includ
 
 - [ ] Array ~
 - [x] Stack
-- [ ] Queue
+- [ ] Queue ~
 - [x] Linked Lists
 - [ ] Hash Table
 - [ ] Binary Tree
+- [ ] Rope
 
 **Questions or suggestions?**
 
