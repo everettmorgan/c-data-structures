@@ -1,7 +1,13 @@
-#include "../linked_list.h"
+#include "../stack/stack.h"
 
 typedef linked_list_node queue_node;
 
 typedef struct queue {
-  linked_list * ll;
+  stack * stk;
 } queue;
+
+queue * queue_new(int max_length) {
+  queue * q = malloc(sizeof(queue));
+  q->stk = stack_new(max_length);
+}
+
