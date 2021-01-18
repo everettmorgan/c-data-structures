@@ -4,7 +4,8 @@
 
 #include "linked_list.c"
 
-#define LINKED_LIST_EQUALITY(name,typ,comp) \
+// meh
+#define LL_EQ(name,typ,comp) \
   int name##_equality(void *y, void *z) { \
     typ *a = y, *b = z; \
     return (comp) ? 1 : 0; \

@@ -8,7 +8,7 @@ typedef struct Shape {
     int w, l;
 } Shape;
 
-LINKED_LIST_EQUALITY(shape, Shape, (a->l == b->l) && (a->w == b->w));
+LL_EQ(shape, Shape, (a->l == b->l) && (a->w == b->w));
 
 int main() {
   linked_list *ll = linked_list_new(1);

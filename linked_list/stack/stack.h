@@ -4,9 +4,9 @@
 
 #include "./stack.c"
 
-stack *stack_new(int max_length);
-void stack_push(stack *stk, void *data);
-void stack_pop(stack *stk);
-stack_node *stack_peek(stack *stk);
-void stack_print(stack *stk);
-void stack_free(stack *stk);
+stack * stack_new(int max_length);
+int stack_push(stack * stk, void * data);
+int stack_pop(stack * stk);
+stack_node * stack_peek(stack * stk);
+void stack_print(stack * stk);
+void stack_free(stack * stk);
