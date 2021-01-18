@@ -1,4 +1,4 @@
-#include "../linked_list/linked_list.h"
+#include "../linked_list.h"
 
 typedef linked_list_node stack_node;
 
@@ -23,7 +23,7 @@ void stack_pop(stack *stk) {
     linked_list_delete(stk->ll, stk->ll->head);
 }
 
-linked_list_node *stack_peek(stack *stk) {
+stack_node *stack_peek(stack *stk) {
     return stk->ll->head;
 }
 
