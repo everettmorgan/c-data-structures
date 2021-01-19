@@ -16,11 +16,11 @@
 #define LL_INSERT(ll, v) linked_list_insert(ll, linked_list_node_new(v))
 
 linked_list *linked_list_new(int type);
-linked_list_node *linked_list_node_new(void *d);
+node *linked_list_node_new(void *d);
 
-linked_list_node *linked_list_find(linked_list *ll, void *v);
-void linked_list_insert(linked_list *ll, linked_list_node *n);
-int linked_list_delete(linked_list *ll, linked_list_node *n);
+node *linked_list_find(linked_list *ll, void *v);
+void linked_list_insert(linked_list *ll, node *n);
+int linked_list_delete(linked_list *ll, node *n);
 int linked_list_delete_value(linked_list *ll, void *v);
 
 void linked_list_compare_fn(linked_list *ll, void(*cmp));

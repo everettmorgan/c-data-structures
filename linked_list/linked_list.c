@@ -6,16 +6,16 @@
 #include<stdlib.h> // malloc
 
 // linked_list_node : an element in a linked list
-typedef struct linked_list_node {
+typedef struct node {
   void * data;
-  struct linked_list_node * next;
-  struct linked_list_node * prev;
-} linked_list_node;
+  struct node * next;
+  struct node * prev;
+} node;
 
 // linked_list: a collection of nodes
 typedef struct linked_list {
-  struct linked_list_node *head;
-  struct linked_list_node *tail;
+  struct node *head;
+  struct node *tail;
   int length;
   int type;
   int (* cmp_fn)(void *, void *);
@@ -35,8 +35,8 @@ linked_list * linked_list_new(int type) {
 }
 
 // linked_list_node_new : returns a pointer to a newly allocated node.
-linked_list_node * linked_list_node_new(void * d) {
-  linked_list_node * n = malloc(sizeof(linked_list_node));
+node * linked_list_node_new(void * d) {
+  node * n = malloc(sizeof(node));
   n->data = d;
   n->next = NULL;
   n->prev = NULL;
@@ -45,8 +45,8 @@ linked_list_node * linked_list_node_new(void * d) {
 
 // linked_list_free : frees a linked list in it's entirety.
 void linked_list_free(linked_list *ll) {
-  linked_list_node * cn = ll->head;
-  linked_list_node * next = NULL;
+  node * cn = ll->head;
+  node * next = NULL;
   int i = 0;
   while (cn != NULL && i < ll->length) {
     next = cn->next;
@@ -61,8 +61,8 @@ void linked_list_free(linked_list *ll) {
 * function. find_node() expects check_func() to return a 0 for no match
 * and any positive integer for a match.
 */
-linked_list_node * linked_list_find(linked_list * ll, void * v) {
-  linked_list_node * curr = ll->head;
+node * linked_list_find(linked_list * ll, void * v) {
+  node * curr = ll->head;
   int i = 0;
   while (curr != NULL && i < ll->length) {
     if (ll->eq_fn(curr->data, v)) {
@@ -75,7 +75,7 @@ linked_list_node * linked_list_find(linked_list * ll, void * v) {
 }
 
 // linked_list_insert : inserts a node into a linked list.
-void linked_list_insert(linked_list * ll, linked_list_node * n) {
+void linked_list_insert(linked_list * ll, node * n) {
   if (ll->length == 0) {
     ll->head = n;
     ll->tail = n;
@@ -112,9 +112,9 @@ int linked_list_is_empty(linked_list * ll) {
   return (ll->length < 1);
 }
 
-int linked_list_delete_singly(linked_list * ll, linked_list_node * n) {
-  linked_list_node * curr = ll->head;
-  linked_list_node * prev = NULL;
+int linked_list_delete_singly(linked_list * ll, node * n) {
+  node * curr = ll->head;
+  node * prev = NULL;
   while (curr != NULL) {
     if (&(curr->data) == &(n->data)) {
       if (curr == ll->head) {
@@ -137,8 +137,8 @@ int linked_list_delete_singly(linked_list * ll, linked_list_node * n) {
   return 0;
 }
 
-int linked_list_delete_doubly(linked_list * ll, linked_list_node * node) {
-  linked_list_node * curr = ll->head;
+int linked_list_delete_doubly(linked_list * ll, node * node) {
+  node * curr = ll->head;
   while (curr != NULL) {
     if (&(curr->data) == &(node->data)){
       if (curr == ll->head) {
@@ -166,8 +166,8 @@ int linked_list_delete_doubly(linked_list * ll, linked_list_node * node) {
   return 1;
 }
 
-int linked_list_delete_circly(linked_list * ll, linked_list_node * node) {
-  linked_list_node * curr = ll->head;
+int linked_list_delete_circly(linked_list * ll, node * node) {
+  node * curr = ll->head;
   int i = 0;
   while (curr != NULL && i < ll->length) {
     if (&(curr->data) == &(node->data)) {
@@ -196,7 +196,7 @@ int linked_list_delete_circly(linked_list * ll, linked_list_node * node) {
 }
 
 // linked_list_delete : safely removes a node from a linked list.
-int linked_list_delete(linked_list * ll, linked_list_node * n) {
+int linked_list_delete(linked_list * ll, node * n) {
   if (linked_list_is_empty(ll))
     return 1;
   if (ll->type == 0)
@@ -215,7 +215,7 @@ int linked_list_delete(linked_list * ll, linked_list_node * n) {
 */
 int linked_list_delete_value(linked_list * ll, void * v) {
   if (linked_list_is_empty(ll)) return 1;
-  linked_list_node * node = linked_list_find(ll, v);
+  node * node = linked_list_find(ll, v);
   linked_list_delete(ll, node);
   return 0;
 }
@@ -234,7 +234,7 @@ void linked_list_equality_fn(linked_list *ll, void (*equal)) {
 * display the node address, it's data propterty and the next node's address.
 */
 void linked_list_print(linked_list * ll) {
-  linked_list_node * cn = ll->head;
+  node * cn = ll->head;
   int i = 0;
   while (cn != NULL && i < ll->length) {
     printf("addr :%p", cn);

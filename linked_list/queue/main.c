@@ -11,7 +11,7 @@ int main() {
 
   queue_print(q);
 
-  queue_node * qn = queue_peek(q);
+  node * qn = queue_peek(q);
   printf("head: %p\n", qn);
 
   queue_dequeue(q);

@@ -1,7 +1,5 @@
 #include "../linked_list.h"
 
-typedef linked_list_node stack_node;
-
 typedef struct stack {
     linked_list * ll;
     int max_length;
@@ -35,7 +33,7 @@ int stack_pop(stack * stk) {
 }
 
 // stack_peek :
-stack_node * stack_peek(stack * stk) {
+node * stack_peek(stack * stk) {
     return stk->ll->tail;
 }
 

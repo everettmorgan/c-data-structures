@@ -1,7 +1,5 @@
 #include "../stack/stack.h"
 
-typedef linked_list_node queue_node;
-
 typedef struct queue {
   stack * stk;
 } queue;
@@ -20,7 +18,7 @@ int queue_enqueue(queue * q, void * d) {
     LL_INSERT(q->stk->ll, d);
   }
   else {
-    queue_node * n = linked_list_node_new(d);
+    node * n = linked_list_node_new(d);
     q->stk->ll->tail->next = n;
     q->stk->ll->tail = n;
     q->stk->ll->length += 1;
@@ -35,7 +33,7 @@ int queue_dequeue(queue * q) {
   return 0;
 };
 
-queue_node * queue_peek(queue * q) {
+node * queue_peek(queue * q) {
   return q->stk->ll->head;
 };
 
