@@ -18,7 +18,7 @@ int queue_enqueue(queue * q, void * d) {
   if (q->stk->ll->length == 0)
     stack_push(q->stk, d);
   else {
-    stack_node * n = linked_list_node_new(d);
+    queue_node * n = linked_list_node_new(d);
     q->stk->ll->tail->next = n;
     q->stk->ll->tail = n;
     q->stk->ll->length += 1;
