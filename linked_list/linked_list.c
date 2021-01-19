@@ -137,10 +137,10 @@ int linked_list_delete_singly(linked_list * ll, node * n) {
   return 0;
 }
 
-int linked_list_delete_doubly(linked_list * ll, node * node) {
+int linked_list_delete_doubly(linked_list * ll, node * n) {
   node * curr = ll->head;
   while (curr != NULL) {
-    if (&(curr->data) == &(node->data)){
+    if (&(curr->data) == &(n->data)){
       if (curr == ll->head) {
         ll->head = curr->next;
         ll->head->prev = NULL;
@@ -166,11 +166,11 @@ int linked_list_delete_doubly(linked_list * ll, node * node) {
   return 1;
 }
 
-int linked_list_delete_circly(linked_list * ll, node * node) {
+int linked_list_delete_circly(linked_list * ll, node * n) {
   node * curr = ll->head;
   int i = 0;
   while (curr != NULL && i < ll->length) {
-    if (&(curr->data) == &(node->data)) {
+    if (&(curr->data) == &(n->data)) {
       if (curr == ll->head) {
         ll->head = curr->next;
         ll->tail->next = ll->head;
@@ -215,8 +215,8 @@ int linked_list_delete(linked_list * ll, node * n) {
 */
 int linked_list_delete_value(linked_list * ll, void * v) {
   if (linked_list_is_empty(ll)) return 1;
-  node * node = linked_list_find(ll, v);
-  linked_list_delete(ll, node);
+  node * n = linked_list_find(ll, v);
+  linked_list_delete(ll, n);
   return 0;
 }
 
