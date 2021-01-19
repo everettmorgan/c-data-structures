@@ -16,27 +16,27 @@ stack * stack_new(int max_length) {
     return s;
 }
 
-// stack_push : inserts a node at the front of the stack
+// stack_push : inserts a node at the top of the stack
 // and will return 1 if the stack is full.
-int stack_stack_push(stack * stk, void * data) {
+int stack_push(stack * stk, void * data) {
   if (stk->ll->length == stk->max_length)
     return 1;
-  linked_list_insert(stk->ll, linked_list_node_new(&data));
+  linked_list_insert(stk->ll, linked_list_node_new(data));
   return 0;
 }
 
-// stack_pop : pops the frontmost node and will return
+// stack_pop : pops the topmost node and will return
 // 1 if the stack is empty.
 int stack_pop(stack * stk) {
   if (stk->ll->length == 0)
     return 1;
-  linked_list_delete(stk->ll, stk->ll->head);
+  linked_list_delete(stk->ll, stk->ll->tail);
   return 0;
 }
 
-// stack_ p
+// stack_peek :
 stack_node * stack_peek(stack * stk) {
-    return stk->ll->head;
+    return stk->ll->tail;
 }
 
 void stack_print(stack * stk) {

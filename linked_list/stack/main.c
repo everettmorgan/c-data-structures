@@ -6,6 +6,7 @@
 
 int main() {
   stack *s = stack_new(5);
+
   stack_push(s, (char *)'h');
   stack_push(s, (char *)'e');
   stack_push(s, (char *)'l');
@@ -17,6 +18,7 @@ int main() {
   stack_pop(s);
   stack_pop(s);
   stack_pop(s);
+
 
   stack_node *h = stack_peek(s);
   printf("head: %p\n\n", h);
