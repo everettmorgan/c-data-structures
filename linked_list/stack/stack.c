@@ -21,7 +21,7 @@ stack * stack_new(int max_length) {
 int stack_push(stack * stk, void * data) {
   if (stk->ll->length == stk->max_length)
     return 1;
-  linked_list_insert(stk->ll, linked_list_node_new(data));
+  LL_INSERT(stk->ll, data);
   return 0;
 }
 
@@ -30,7 +30,7 @@ int stack_push(stack * stk, void * data) {
 int stack_pop(stack * stk) {
   if (stk->ll->length == 0)
     return 1;
-  linked_list_delete(stk->ll, stk->ll->tail);
+  LL_DEL_TAIL(stk->ll);
   return 0;
 }
 

@@ -13,10 +13,12 @@ queue * queue_new(int max_length) {
 }
 
 int queue_enqueue(queue * q, void * d) {
-  if (q->stk->ll->length == q->stk->max_length)
+  if (q->stk->ll->length == q->stk->max_length) {
     return 1;
-  if (q->stk->ll->length == 0)
-    stack_push(q->stk, d);
+  }
+  if (q->stk->ll->length == 0) {
+    LL_INSERT(q->stk->ll, d);
+  }
   else {
     queue_node * n = linked_list_node_new(d);
     q->stk->ll->tail->next = n;
@@ -29,7 +31,7 @@ int queue_enqueue(queue * q, void * d) {
 int queue_dequeue(queue * q) {
   if (q->stk->ll->length == 0)
     return 1;
-  linked_list_delete(q->stk->ll, q->stk->ll->head);
+  LL_DEL_HEAD(q->stk->ll);
   return 0;
 };
 

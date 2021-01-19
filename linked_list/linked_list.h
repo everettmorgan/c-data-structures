@@ -6,10 +6,14 @@
 
 // meh
 #define LL_EQ(name,typ,comp) \
-  int name##_equality(void *y, void *z) { \
-    typ *a = y, *b = z; \
+  int name##_equality(void *_a, void *_b) { \
+    typ *a = _a, *b = _b; \
     return (comp) ? 1 : 0; \
   } \
+
+#define LL_DEL_HEAD(ll) linked_list_delete(ll, ll->head)
+#define LL_DEL_TAIL(ll) linked_list_delete(ll, ll->tail)
+#define LL_INSERT(ll, v) linked_list_insert(ll, linked_list_node_new(v))
 
 linked_list *linked_list_new(int type);
 linked_list_node *linked_list_node_new(void *d);

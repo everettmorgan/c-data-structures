@@ -19,7 +19,6 @@ int main() {
   stack_pop(s);
   stack_pop(s);
 
-
   stack_node *h = stack_peek(s);
   printf("head: %p\n\n", h);
 
