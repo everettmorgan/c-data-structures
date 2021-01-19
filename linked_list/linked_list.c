@@ -5,7 +5,7 @@
 #include<stdio.h> // printf
 #include<stdlib.h> // malloc
 
-// node : an element in a linked list
+// linked_list_node : an element in a linked list
 typedef struct linked_list_node {
   void * data;
   struct linked_list_node * next;
@@ -22,7 +22,7 @@ typedef struct linked_list {
   int (* eq_fn)(void *, void *);
 } linked_list;
 
-// new_linked_list : returns a pointer to a newly allocated linked list.
+// linked_list_new : returns a pointer to a newly allocated linked list.
 linked_list * linked_list_new(int type) {
   linked_list * ll = malloc(sizeof(linked_list));
   ll->type = type;
@@ -34,7 +34,7 @@ linked_list * linked_list_new(int type) {
   return ll;
 }
 
-// new_node : returns a pointer to a newly allocated node.
+// linked_list_node_new : returns a pointer to a newly allocated node.
 linked_list_node * linked_list_node_new(void * d) {
   linked_list_node * n = malloc(sizeof(linked_list_node));
   n->data = d;
@@ -43,7 +43,7 @@ linked_list_node * linked_list_node_new(void * d) {
   return n;
 }
 
-// free_linked_list : frees all nodes and the parent linked list from the stack.
+// linked_list_free : frees a linked list in it's entirety.
 void linked_list_free(linked_list *ll) {
   linked_list_node * cn = ll->head;
   linked_list_node * next = NULL;
@@ -74,7 +74,7 @@ linked_list_node * linked_list_find(linked_list * ll, void * v) {
   return NULL;
 }
 
-// insert : inserts a node into the linked list.
+// linked_list_insert : inserts a node into a linked list.
 void linked_list_insert(linked_list * ll, linked_list_node * n) {
   if (ll->length == 0) {
     ll->head = n;
@@ -104,8 +104,9 @@ void linked_list_insert(linked_list * ll, linked_list_node * n) {
   ll->length += 1;
 }
 
-/* is_empty : returns whether or not a linked list is empty or not.
-* is_empty() will return 1 if a linked list is empty and 0 if it isn't.
+/* linked_list_is_empty : returns whether or not a linked list is empty
+* or not. is_empty() will return 1 if a linked list is empty and 0 if
+* it isn't empty.
 */
 int linked_list_is_empty(linked_list * ll) {
   return (ll->length < 1);
@@ -113,25 +114,24 @@ int linked_list_is_empty(linked_list * ll) {
 
 int linked_list_delete_singly(linked_list * ll, linked_list_node * n) {
   linked_list_node * curr = ll->head;
+  linked_list_node * prev = NULL;
   while (curr != NULL) {
     if (&(curr->data) == &(n->data)) {
       if (curr == ll->head) {
         ll->head = curr->next;
       }
       else if (curr == ll->tail) {
-        ll->tail = ll->tail->prev;
-        ll->tail->next = NULL;
+        ll->tail = prev;
       }
       else {
-        if (curr->next != NULL)
-          curr->next->prev = curr->prev;
-        if (curr->prev != NULL)
-          curr->prev->next = curr->next;
+        prev->next = curr->next;
+        curr->next->prev = prev;
       }
       free(curr);
       ll->length -= 1;
       return 1;
    }
+   prev = curr;
    curr = curr->next;
   }
   return 0;
@@ -195,7 +195,7 @@ int linked_list_delete_circly(linked_list * ll, linked_list_node * node) {
   return 1;
 }
 
-// delete_node : safely removes a node from it's linked list.
+// linked_list_delete : safely removes a node from a linked list.
 int linked_list_delete(linked_list * ll, linked_list_node * n) {
   if (linked_list_is_empty(ll))
     return 1;
@@ -220,24 +220,27 @@ int linked_list_delete_value(linked_list * ll, void * v) {
   return 0;
 }
 
+// linked_list_compare_fn : sets a linked_list's compare function.
 void linked_list_compare_fn(linked_list * ll, void (* cmp)) {
     ll->cmp_fn = cmp;
 }
 
+// linked_list_equality_fn : sets a linked_list's equality function.
 void linked_list_equality_fn(linked_list *ll, void (*equal)) {
     ll->eq_fn = equal;
 }
 
-/* print_linked_list : pretty prints a linked list to the console. It will
+/* linked_list_print : pretty prints a linked list to the console. It will
 * display the node address, it's data propterty and the next node's address.
-* */
+*/
 void linked_list_print(linked_list * ll) {
   linked_list_node * cn = ll->head;
   int i = 0;
   while (cn != NULL && i < ll->length) {
     printf("addr :%p", cn);
     printf("\tnext: %p", cn->next);
-    printf("\tprev: %p\n", cn->prev);
+    printf("\tprev: %p", cn->prev);
+    printf("\tnull: %d\n", cn->data == NULL);
     cn = cn->next;
     i++;
   }
