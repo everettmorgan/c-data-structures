@@ -143,7 +143,9 @@ int linked_list_delete_doubly(linked_list * ll, node * n) {
     if (&(curr->data) == &(n->data)){
       if (curr == ll->head) {
         ll->head = curr->next;
-        ll->head->prev = NULL;
+        if (ll->head != NULL) {
+            ll->head->prev = NULL;
+        }
       }
       else if (curr == ll->tail) {
         ll->tail = curr->prev;
@@ -173,8 +175,10 @@ int linked_list_delete_circly(linked_list * ll, node * n) {
     if (&(curr->data) == &(n->data)) {
       if (curr == ll->head) {
         ll->head = curr->next;
-        ll->tail->next = ll->head;
-        ll->head->prev = ll->tail;
+          if (ll->head != NULL) {
+              ll->tail->next = ll->head;
+              ll->head->prev = ll->tail;
+          }
       }
       else if (curr == ll->tail) {
         ll->tail = ll->tail->prev;
@@ -231,7 +235,7 @@ void linked_list_equality_fn(linked_list *ll, void (*equal)) {
 }
 
 /* linked_list_print : pretty prints a linked list to the console. It will
-* display the node address, it's data propterty and the next node's address.
+* display the node address, it's data property and the next node's address.
 */
 void linked_list_print(linked_list * ll) {
   node * cn = ll->head;
