@@ -5,9 +5,9 @@
 #include "linked_list.c"
 
 // meh
-#define LL_EQ(name,typ,comp) \
-  int name##_equality(void *_a, void *_b) { \
-    typ *a = _a, *b = _b; \
+#define LL_EQ(name,typa,typb,comp) \
+  int name##_equality(void * __a, void * __b) { \
+    typa * _a = __a; typb * _b = __b;  \
     return (comp) ? 1 : 0; \
   } \
 
