@@ -13,7 +13,7 @@ Each subdirectory will focus on a particular data structure and will also includ
 - [x] Linked Lists
   - [x] Stack
   - [x] Queue
-- [ ] Hash Table ~
+- [x] Hash Table
 - [ ] Binary Tree
   - [ ] Rope
 
