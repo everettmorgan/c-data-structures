@@ -33,20 +33,22 @@ void hash_table_insert(hash_table * ht, void * d, int key) {
 
 hnode * hash_table_search(hash_table * ht, int key) {
   int ll = key % SIZE-1;
-  node * n = linked_list_find((*ht)[ll], &key);
-  if (n != NULL) {
-    return (hnode *)n->data;
+  if ((*ht)[ll] != NULL) {
+      node *n = linked_list_find((*ht)[ll], &key);
+      if (n != NULL) {
+          return (hnode *)n->data;
+      }
   }
-  else {
-    return NULL;
-  }
+  return NULL;
 }
 
 void hash_table_delete(hash_table * ht, int key) {
     int ll = key % SIZE-1;
-    node * n = linked_list_find((*ht)[ll], &key);
-    if (n != NULL) {
-        linked_list_delete((*ht)[ll], n);
+    if ((*ht)[ll] != NULL) {
+        node * n = linked_list_find((*ht)[ll], &key);
+        if (n != NULL) {
+            linked_list_delete((*ht)[ll], n);
+        }
     }
 }
 
