@@ -1,9 +1,13 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
 #include "../linked_list/linked_list.h"
 
-#define SIZE 100000
+#define SIZE 25
 
 typedef void * hash_table[SIZE];
 
@@ -13,14 +17,14 @@ typedef struct hash_tbl_node {
 } hnode;
 
 hash_table * hash_table_new() {
-  hash_table * ht = malloc(sizeof(hash_table));
+  hash_table * ht = calloc(SIZE, sizeof(void *));
   return ht;
 }
 
 LL_EQ(hnode_key, hnode, int, (_a->key == *_b));
 
 void hash_table_insert(hash_table * ht, void * d, int key) {
-    int ll = key % SIZE-1;
+    int ll = key % (SIZE-1);
     if ((*ht)[ll] == NULL) {
       (*ht)[ll] = linked_list_new(0);
       linked_list_equality_fn((*ht)[ll], hnode_key_equality);
@@ -32,18 +36,18 @@ void hash_table_insert(hash_table * ht, void * d, int key) {
 }
 
 hnode * hash_table_search(hash_table * ht, int key) {
-  int ll = key % SIZE-1;
+  int ll = key % (SIZE-1);
   if ((*ht)[ll] != NULL) {
-      node *n = linked_list_find((*ht)[ll], &key);
+      node * n = linked_list_find((*ht)[ll], &key);
       if (n != NULL) {
-          return (hnode *)n->data;
+          return (hnode *)(n->data);
       }
   }
   return NULL;
 }
 
 void hash_table_delete(hash_table * ht, int key) {
-    int ll = key % SIZE-1;
+    int ll = key % (SIZE-1);
     if ((*ht)[ll] != NULL) {
         node * n = linked_list_find((*ht)[ll], &key);
         if (n != NULL) {
