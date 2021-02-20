@@ -7,11 +7,17 @@
 int main() {
   stack *s = stack_new(5);
 
-  stack_push(s, (char *)'h');
-  stack_push(s, (char *)'e');
-  stack_push(s, (char *)'l');
-  stack_push(s, (char *)'l');
-  stack_push(s, (char *)'o');
+  char a = 'h';
+  char b = 'e';
+  char c = 'l';
+  char d = 'l';
+  char e = 'o';
+
+  stack_push(s, &a);
+  stack_push(s, &b);
+  stack_push(s, &c);
+  stack_push(s, &d);
+  stack_push(s, &e);
 
   stack_print(s);
 

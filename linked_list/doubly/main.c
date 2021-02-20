@@ -8,7 +8,7 @@ typedef struct Shape {
     int w, l;
 } Shape;
 
-LL_EQ(shape, Shape, (a->l == b->l) && (a->w == b->w));
+LL_EQ(shape, Shape, Shape, (_a->l == _b->l) && (_a->w == _b->w));
 
 int main() {
   linked_list *ll = linked_list_new(1);
@@ -26,7 +26,7 @@ int main() {
   linked_list_print(ll);
 
   linked_list_delete_value(ll, &(Shape){5,5});
-  // linked_list_delete(ll, linked_list_find(ll, &rectangle));
+   linked_list_delete(ll, linked_list_find(ll, &rectangle));
   linked_list_print(ll);
 
   linked_list_free(ll);
