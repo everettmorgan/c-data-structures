@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 #include "../stack/stack.h"
 
 typedef struct queue {
@@ -15,7 +19,7 @@ int queue_enqueue(queue * q, void * d) {
     return 1;
   }
   if (q->stk->ll->length == 0) {
-    LL_INSERT(q->stk->ll, d);
+      stack_push(q->stk, d);
   }
   else {
     node * n = linked_list_node_new(d);
@@ -29,7 +33,7 @@ int queue_enqueue(queue * q, void * d) {
 int queue_dequeue(queue * q) {
   if (q->stk->ll->length == 0)
     return 1;
-  LL_DEL_HEAD(q->stk->ll);
+  stack_pop(q->stk);
   return 0;
 };
 
@@ -43,5 +47,5 @@ void queue_free(queue * q) {
 };
 
 void queue_print(queue * q) {
-  linked_list_print(q->stk->ll);
+  stack_print(q->stk);
 };
