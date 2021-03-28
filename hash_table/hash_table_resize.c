@@ -8,8 +8,8 @@
 #define DEFAULT_SIZE 5
 #define INCREMENT 2
 
-#define hash(__len,__key) (__key % (__len-1))
-#define retrieve(__key) (ht->table[hash(ht->size,(__key))])
+#define hash(__len, __key) ( ( (int)__key ) % ( ( (int)__len) - 1 ) )
+#define retrieve(__key) ( ht->table[ hash( ht->size, ( ( (int)__key ) ) ) ])
 
 typedef struct hash_table_node {
     void * data;

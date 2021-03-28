@@ -15,6 +15,9 @@
   #define HASH_TABLE_SIZE 25
 #endif
 
+#define hash(__key) ( ( (int)__key ) % ( ( HASH_TABLE_SIZE - 1 ) ) )
+#define retrieve(__key) ( ht[ hash( ( ( (int)__key ) ) ) ])
+
 typedef void ** hash_table;
 
 typedef struct hash_tbl_node {
@@ -22,28 +25,29 @@ typedef struct hash_tbl_node {
   int key;
 } hnode;
 
+int hnode_key_equality(hnode * a, int * b) {
+  return a->key == *b;
+}
+
 hash_table hash_table_new() {
   return calloc(HASH_TABLE_SIZE, sizeof(void *));
 }
 
-int hnode_key_equality(hnode * a, int * b) { return a->key == *b; }
-
 void hash_table_insert(hash_table ht, void * d, int key) {
-    int ll = key % (HASH_TABLE_SIZE-1);
+    int ll = hash(key);
     if (ht[ll] == NULL) {
-      ht[ll] = linked_list_new(0);
-      linked_list_equality_fn(ht[ll], hnode_key_equality);
+      ht[ll] = ll_new(0);
+      ll_eq_fn(ht[ll], hnode_key_equality);
     }
     hnode * hn = malloc(sizeof(hnode));
     hn->data = d;
     hn->key = key;
-    LL_INSERT(ht[ll], hn);
+    ll_insert(ht[ll], hn);
 }
 
 hnode * hash_table_search(hash_table ht, int key) {
-  int ll = key % (HASH_TABLE_SIZE-1);
-  if (ht[ll] != NULL) {
-      node * n = linked_list_find(ht[ll], &key);
+  if (retrieve(key)) {
+      node * n = ll_find(ht[hash(key)], &key);
       if (n != NULL) {
           return (hnode *)(n->data);
       }
@@ -52,11 +56,11 @@ hnode * hash_table_search(hash_table ht, int key) {
 }
 
 void hash_table_delete(hash_table ht, int key) {
-    int ll = key % (HASH_TABLE_SIZE-1);
+    int ll = hash(key);
     if (ht[ll] != NULL) {
-        node * n = linked_list_find(ht[ll], &key);
+        node * n = ll_find(ht[ll], &key);
         if (n != NULL) {
-            linked_list_delete(ht[ll], n);
+            ll_del(ht[ll], n);
         }
     }
 }
@@ -65,9 +69,9 @@ void hash_table_print(hash_table ht) {
   for (int i = 0; i < HASH_TABLE_SIZE; i++) {
     if (ht[i] != NULL) {
         printf("--++--\n");
-        printf("len: %d\n", ((linked_list *)(ht[i]))->length);
+        printf("len: %d\n", ll_prop(ht[i], length));
         printf("%p\n", ht[i]);
-        linked_list_print(ht[i]);
+        ll_print(ht[i]);
     }
   }
 }

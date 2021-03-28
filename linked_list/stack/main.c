@@ -5,7 +5,7 @@
 #include "stack.h"
 
 int main() {
-  stack *s = stack_new(5);
+  stack * stk = stk_new(5);
 
   char a = 'h';
   char b = 'e';
@@ -13,21 +13,21 @@ int main() {
   char d = 'l';
   char e = 'o';
 
-  stack_push(s, &a);
-  stack_push(s, &b);
-  stack_push(s, &c);
-  stack_push(s, &d);
-  stack_push(s, &e);
+  stack_push(stk, &a);
+  stack_push(stk, &b);
+  stack_push(stk, &c);
+  stack_push(stk, &d);
+  stack_push(stk, &e);
 
-  stack_print(s);
+  stack_print(stk);
 
-  stack_pop(s);
-  stack_pop(s);
-  stack_pop(s);
+  stack_pop(stk);
+  stack_pop(stk);
+  stack_pop(stk);
 
-  node *h = stack_peek(s);
+  node * h = stack_peek(stk);
   printf("head: %p\n\n", h);
 
-  stack_print(s);
-  stack_free(s);
+  stack_print(stk);
+  stack_free(stk);
 }

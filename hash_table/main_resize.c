@@ -15,15 +15,15 @@ int main() {
 
     hash_table * ht = hash_table_new();
 
-    hash_table_insert(ht, &b, (int)a+15);
-    hash_table_insert(ht, &c, (int)b+15);
-    hash_table_insert(ht, &d, (int)c+15);
-    hash_table_insert(ht, &e, (int)d+15);
+    hash_table_insert(ht, &a, (int)a+15);
+    hash_table_insert(ht, &b, (int)b+15);
+    hash_table_insert(ht, &c, (int)c+15);
+    hash_table_insert(ht, &d, (int)d+15);
     hash_table_insert(ht, &e, (int)e+15);
 
     hash_table_print(ht);
 
-    node * n = hash_table_search(ht, 11);
+    node * n = hash_table_search(ht, (int)b+15);
     if (n != NULL) {
         printf("found %c at %p\n", *(char *)n->data, n);
     }

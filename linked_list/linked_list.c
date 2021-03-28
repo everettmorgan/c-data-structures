@@ -75,7 +75,9 @@ node * linked_list_find(linked_list * ll, void * v) {
 }
 
 // linked_list_insert : inserts a node into a linked list.
-void linked_list_insert(linked_list * ll, node * n) {
+void linked_list_insert(linked_list * ll, void * d) {
+  node * n = linked_list_node_new(d);
+
   if (ll->length == 0) {
     ll->head = n;
     ll->tail = n;

@@ -13,7 +13,7 @@ typedef struct stack {
 // returns a pointer to the newly allocated stack.
 stack * stack_new(int max_length) {
     stack * s = malloc(sizeof(stack));
-    s->ll = linked_list_new(0);
+    s->ll = singly_ll;
     s->max_length = max_length;
     return s;
 }
@@ -23,7 +23,7 @@ stack * stack_new(int max_length) {
 int stack_push(stack * stk, void * data) {
   if (stk->ll->length == stk->max_length)
     return 1;
-  LL_INSERT(stk->ll, data);
+  ll_insert(stk->ll, data);
   return 0;
 }
 
@@ -32,7 +32,7 @@ int stack_push(stack * stk, void * data) {
 int stack_pop(stack * stk) {
   if (stk->ll->length == 0)
     return 1;
-  LL_DEL_TAIL(stk->ll);
+  ll_drop(stk->ll);
   return 0;
 }
 
@@ -42,10 +42,10 @@ node * stack_peek(stack * stk) {
 }
 
 void stack_print(stack * stk) {
-    linked_list_print(stk->ll);
+    ll_print(stk->ll);
 }
 
 void stack_free(stack * stk) {
-    linked_list_free(stk->ll);
+    ll_free(stk->ll);
     free(stk);
 }

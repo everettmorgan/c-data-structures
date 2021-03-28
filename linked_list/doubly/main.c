@@ -11,24 +11,24 @@ typedef struct Shape {
 int shape_equality(Shape * a, Shape * b) { return a->l == b->l && a->w == b->w; };
 
 int main() {
-  linked_list *ll = linked_list_new(1);
-  linked_list_equality_fn(ll, shape_equality);
+  linked_list *ll = ll_new(1);
+  ll_eq_fn(ll, shape_equality);
 
   Shape square = { 5, 5 };
   Shape rectangle = { 5, 4 };
   Shape rectangle2 = { 6, 7 };
   Shape rectangle3 = { 12, 23 };
 
-  linked_list_insert(ll, linked_list_node_new(&square));
-  linked_list_insert(ll, linked_list_node_new(&rectangle));
-  linked_list_insert(ll, linked_list_node_new(&rectangle2));
-  linked_list_insert(ll, linked_list_node_new(&rectangle3));
-  linked_list_print(ll);
+  ll_insert(ll, &square);
+  ll_insert(ll, &rectangle);
+  ll_insert(ll, &rectangle2);
+  ll_insert(ll, &rectangle3);
+  ll_print(ll);
 
-  linked_list_delete_value(ll, &(Shape){5,5});
-   linked_list_delete(ll, linked_list_find(ll, &rectangle));
-  linked_list_print(ll);
+  ll_del_v(ll, &square);
+  ll_del(ll, ll_find(ll, &rectangle));
+  ll_print(ll);
 
-  linked_list_free(ll);
+  ll_free(ll);
   return 0;
 }
