@@ -2,72 +2,71 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-#include<stdlib.h> // calloc(), exit(), realloc()
+#include<stdio.h> // printf()
+#include<stdlib.h> // malloc(), calloc(), exit()
 
-#define DEFAULT_SIZE 10
+#define DEFAULT_SIZE 5
 #define INCREMENT 2
 
-typedef struct hash_table {
-    void * table[DEFAULT_SIZE];
-    int size;
-} hash_table;
+#define hash(__len,__key) (__key % (__len-1))
+#define retrieve(__key) (ht->table[hash(ht->size,(__key))])
 
-int hash(int len, int key) {
-    return key % (len-1);
+typedef struct hash_table_node {
+    void * data;
+    int key;
+} node;
+
+node * hash_table_node_new(void * d, int key) {
+    node * n = malloc(sizeof(node));
+    n->data = d;
+    n->key = key;
+    return n;
 }
 
+typedef struct hash_table {
+    int size;
+    void ** table;
+} hash_table;
+
 hash_table * hash_table_new() {
-    hash_table * ht = calloc(DEFAULT_SIZE, sizeof(void *));
-    if (ht == NULL) {
-        exit(1);
-    }
+    hash_table * ht = malloc(sizeof(hash_table));
+    ht->table = calloc(DEFAULT_SIZE, sizeof(void *));
     ht->size = DEFAULT_SIZE;
     return ht;
 }
 
-void * hash_table_search(hash_table * ht, int key) {
-    int i = hash(ht->size, key);
-    if (ht->table[i] != NULL) {
-        return ht->table[i];
-    }
-    return NULL;
+node * hash_table_search(hash_table * ht, int key) {
+    return retrieve(key);
 }
 
-void * crealloc(void * v, int vsz, int newsz) {
-    void * n = calloc(newsz, sizeof(void *));
-    for (int i = 0; i < vsz; i++) {
-        n = v;
-        n++;
-        v++;
-    }
-    return n;
+hash_table * resize_hash_table(hash_table * ht) {
+    hash_table * nht = malloc(sizeof(hash_table));
+    nht->table = calloc(ht->size+INCREMENT, sizeof(void *));
+    nht->size = ht->size+INCREMENT;
+    return nht;
 }
 
-hash_table * hash_table_resize(hash_table * ht, int newsz) {
-    void * error = crealloc(ht->table, ht->size, newsz);
-    if (error == NULL) {
-        exit(1);
-    }
-    ht->size = newsz;
-    return ht;
-}
-
-void hash_table_insert(hash_table * ht, void * d, int key) {
-    int i;
-    try_to_insert: do {
-        i = hash(ht->size, key);
-        if (ht->table[i] != NULL) {
-            hash_table_resize(ht, ht->size+INCREMENT);
-            goto try_to_insert;
-        }
-    } while(0);
-    ht->table[i] = d;
-}
+#define NODE_DATA (((node *)ht->table[i])->data)
+#define NODE_KEY (((node *)ht->table[i])->key)
 
 void hash_table_print(hash_table * ht) {
     printf("***---***\n");
+    printf("length: %d\n", ht->size);
     for (int i = 0; i < ht->size; i++) {
-        printf("void * %p\n", ht->table[i]);
+        printf("addr: %p %d\n", ht->table[i], ht->table[i] ? NODE_KEY : -1);
     }
     printf("***---***\n");
+}
+
+void hash_table_insert(hash_table * ht, void * d, int key) {
+    if (retrieve(key)) {
+        hash_table * nht = resize_hash_table(ht);
+        for (int i = 0; i < ht->size; i++) {
+            if (ht->table[i]) {
+                hash_table_insert(nht, NODE_DATA, NODE_KEY);
+            }
+        }
+        *ht = *nht;
+    }
+    ht->table[hash(ht->size, key)] = hash_table_node_new(d, key);
 }

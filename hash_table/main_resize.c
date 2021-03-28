@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 #include<stdio.h>
+#include<stdlib.h>
 #include "hash_table_resize.h"
 
 int main() {
@@ -14,25 +15,18 @@ int main() {
 
     hash_table * ht = hash_table_new();
 
-    hash_table_insert(ht, &a, 101);
-    hash_table_insert(ht, &b, 51);
-    hash_table_insert(ht, &c, 21);
-    hash_table_insert(ht, &d, 11);
-    hash_table_insert(ht, &e, 91);
-    hash_table_insert(ht, &a, 141);
-    hash_table_insert(ht, &b, 541);
-    hash_table_insert(ht, &c, 221);
-    hash_table_insert(ht, &d, 111);
-    hash_table_insert(ht, &e, 981);
+    hash_table_insert(ht, &b, (int)a+15);
+    hash_table_insert(ht, &c, (int)b+15);
+    hash_table_insert(ht, &d, (int)c+15);
+    hash_table_insert(ht, &e, (int)d+15);
+    hash_table_insert(ht, &e, (int)e+15);
 
     hash_table_print(ht);
 
-    void * n = hash_table_search(ht, 15);
+    node * n = hash_table_search(ht, 11);
     if (n != NULL) {
-        printf("found %c at %p\n", *(char *)n, n);
+        printf("found %c at %p\n", *(char *)n->data, n);
     }
-
-    hash_table_print(ht);
 
     return 0;
 }
