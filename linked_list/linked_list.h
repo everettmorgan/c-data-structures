@@ -4,13 +4,6 @@
 
 #include "linked_list.c"
 
-// meh
-#define LL_EQ(name,typa,typb,comp) \
-  int name##_equality(void * __a, void * __b) { \
-    typa * _a = __a; typb * _b = __b;  \
-    return (comp) ? 1 : 0; \
-  } \
-
 #define LL_DEL_HEAD(ll) linked_list_delete((linked_list *)ll, (node *)ll->head)
 #define LL_DEL_TAIL(ll) linked_list_delete((linked_list *)ll, (node *)ll->tail)
 #define LL_INSERT(ll, v) linked_list_insert((linked_list *)ll, linked_list_node_new((void *)v))
