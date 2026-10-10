@@ -30,7 +30,7 @@ int *merge(int a1[], int a2[]) {
   int *a3_p = (int *)malloc(sizeof(int)*a3_sz);
   a3_p[a3_sz-1] = PADD;
 
-  int i,j,k = 0;
+  int i = 0, j = 0, k = 0;
   while (j < a1s && k < a2s) {
     if (a1[j] < a2[k]) {
       a3_p[i++] = a1[j++];
