@@ -81,6 +81,10 @@ void linked_list_insert(linked_list * ll, void * d) {
   if (ll->length == 0) {
     ll->head = n;
     ll->tail = n;
+    if (ll->type == 2) {
+      n->next = n;
+      n->prev = n;
+    }
   }
   else {
     switch (ll->type) {
