@@ -33,7 +33,7 @@ int queue_enqueue(queue * q, void * d) {
 int queue_dequeue(queue * q) {
   if (q->stk->ll->length == 0)
     return 1;
-  stack_pop(q->stk);
+  linked_list_delete(q->stk->ll, q->stk->ll->head);
   return 0;
 };
 

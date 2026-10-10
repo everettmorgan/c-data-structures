@@ -118,16 +118,14 @@ int linked_list_delete_singly(linked_list * ll, node * n) {
   node * curr = ll->head;
   node * prev = NULL;
   while (curr != NULL) {
-    if (&(curr->data) == &(n->data)) {
+    if (curr == n) {
       if (curr == ll->head) {
         ll->head = curr->next;
-      }
-      else if (curr == ll->tail) {
-        ll->tail = prev;
-      }
-      else {
+      } else {
         prev->next = curr->next;
-        curr->next->prev = prev;
+      }
+      if (curr == ll->tail) {
+        ll->tail = prev;
       }
       free(curr);
       ll->length -= 1;
