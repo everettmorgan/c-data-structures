@@ -141,7 +141,11 @@ int linked_list_delete_doubly(linked_list * ll, node * n) {
   node * curr = ll->head;
   while (curr != NULL) {
     if (&(curr->data) == &(n->data)){
-      if (curr == ll->head) {
+      if (ll->length == 1) {
+        ll->head = NULL;
+        ll->tail = NULL;
+      }
+      else if (curr == ll->head) {
         ll->head = curr->next;
         if (ll->head != NULL) {
             ll->head->prev = NULL;
@@ -173,7 +177,11 @@ int linked_list_delete_circly(linked_list * ll, node * n) {
   int i = 0;
   while (curr != NULL && i < ll->length) {
     if (&(curr->data) == &(n->data)) {
-      if (curr == ll->head) {
+      if (ll->length == 1) {
+        ll->head = NULL;
+        ll->tail = NULL;
+      }
+      else if (curr == ll->head) {
         ll->head = curr->next;
           if (ll->head != NULL) {
               ll->tail->next = ll->head;
