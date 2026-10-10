@@ -129,18 +129,18 @@ int linked_list_delete_singly(linked_list * ll, node * n) {
       }
       free(curr);
       ll->length -= 1;
-      return 1;
+      return 0;
    }
    prev = curr;
    curr = curr->next;
   }
-  return 0;
+  return 1;
 }
 
 int linked_list_delete_doubly(linked_list * ll, node * n) {
   node * curr = ll->head;
   while (curr != NULL) {
-    if (&(curr->data) == &(n->data)){
+    if (curr == n){
       if (ll->length == 1) {
         ll->head = NULL;
         ll->tail = NULL;
@@ -176,7 +176,7 @@ int linked_list_delete_circly(linked_list * ll, node * n) {
   node * curr = ll->head;
   int i = 0;
   while (curr != NULL && i < ll->length) {
-    if (&(curr->data) == &(n->data)) {
+    if (curr == n) {
       if (ll->length == 1) {
         ll->head = NULL;
         ll->tail = NULL;
@@ -209,15 +209,15 @@ int linked_list_delete_circly(linked_list * ll, node * n) {
 
 // linked_list_delete : safely removes a node from a linked list.
 int linked_list_delete(linked_list * ll, node * n) {
-  if (linked_list_is_empty(ll))
+  if (ll == NULL || n == NULL || linked_list_is_empty(ll))
     return 1;
   if (ll->type == 0)
-    linked_list_delete_singly(ll, n);
-  else if (ll->type == 1)
-    linked_list_delete_doubly(ll, n);
-  else if (ll->type == 2)
-    linked_list_delete_circly(ll, n);
-  return 0;
+    return linked_list_delete_singly(ll, n);
+  if (ll->type == 1)
+    return linked_list_delete_doubly(ll, n);
+  if (ll->type == 2)
+    return linked_list_delete_circly(ll, n);
+  return 1;
 }
 
 /* delete_by_val : traverses the linked list, matches the data
@@ -226,10 +226,10 @@ int linked_list_delete(linked_list * ll, node * n) {
 * no matches the data parameter.
 */
 int linked_list_delete_value(linked_list * ll, void * v) {
-  if (linked_list_is_empty(ll)) return 1;
+  if (ll == NULL || linked_list_is_empty(ll)) return 1;
   node * n = linked_list_find(ll, v);
-  linked_list_delete(ll, n);
-  return 0;
+  if (n == NULL) return 1;
+  return linked_list_delete(ll, n);
 }
 
 // linked_list_compare_fn : sets a linked_list's compare function.
