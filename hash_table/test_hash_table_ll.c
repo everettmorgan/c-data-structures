@@ -7,7 +7,34 @@
 static size_t allocation_count;
 static size_t outstanding_allocations;
 
+/* Fail allocations deterministically so OOM paths can be exercised. */
+enum { ALLOCATION_FAILURE_DISABLED = -1 };
+static int allocations_before_failure = ALLOCATION_FAILURE_DISABLED;
+
+static int should_fail_allocation(void) {
+  if (allocations_before_failure == ALLOCATION_FAILURE_DISABLED) {
+    return 0;
+  }
+  if (allocations_before_failure == 0) {
+    return 1;
+  }
+  allocations_before_failure--;
+  return 0;
+}
+
+static void fail_allocation_after(int successful_allocations) {
+  assert(successful_allocations >= 0);
+  allocations_before_failure = successful_allocations;
+}
+
+static void stop_failing_allocations(void) {
+  allocations_before_failure = ALLOCATION_FAILURE_DISABLED;
+}
+
 static void *test_malloc(size_t size) {
+  if (should_fail_allocation()) {
+    return NULL;
+  }
   void *allocation = malloc(size);
   if (allocation != NULL) {
     allocation_count++;
@@ -17,6 +44,9 @@ static void *test_malloc(size_t size) {
 }
 
 static void *test_calloc(size_t count, size_t size) {
+  if (should_fail_allocation()) {
+    return NULL;
+  }
   void *allocation = calloc(count, size);
   if (allocation != NULL) {
     allocation_count++;
@@ -213,6 +243,100 @@ static void test_delete_from_null_table(void) {
   assert(outstanding_allocations == outstanding_before);
 }
 
+static void test_insert_null_table(void) {
+  int value = 11;
+  size_t allocations_before = allocation_count;
+  size_t outstanding_before = outstanding_allocations;
+
+  hash_table_insert(NULL, &value, FIRST_KEY);
+
+  assert(allocation_count == allocations_before);
+  assert(outstanding_allocations == outstanding_before);
+  assert(value == 11);
+}
+
+static void test_search_null_table(void) {
+  size_t allocations_before = allocation_count;
+  size_t outstanding_before = outstanding_allocations;
+
+  assert(hash_table_search(NULL, FIRST_KEY) == NULL);
+  assert(hash_table_search(NULL, ABSENT_KEY) == NULL);
+
+  assert(allocation_count == allocations_before);
+  assert(outstanding_allocations == outstanding_before);
+}
+
+static void test_print_null_table(void) {
+  size_t allocations_before = allocation_count;
+  size_t outstanding_before = outstanding_allocations;
+
+  hash_table_print(NULL);
+
+  assert(allocation_count == allocations_before);
+  assert(outstanding_allocations == outstanding_before);
+}
+
+static void test_insert_oom_on_bucket_allocation(void) {
+  int value = 11;
+  hash_table ht = hash_table_new();
+  assert(ht != NULL);
+
+  fail_allocation_after(0);
+  hash_table_insert(ht, &value, FIRST_KEY);
+  stop_failing_allocations();
+
+  assert(ht[hash(FIRST_KEY)] == NULL);
+  assert(hash_table_search(ht, FIRST_KEY) == NULL);
+  assert(outstanding_allocations == 1);
+
+  hash_table_free(ht);
+  assert_no_outstanding_allocations();
+  assert(value == 11);
+}
+
+static void test_insert_oom_on_hnode_allocation(void) {
+  int value = 11;
+  hash_table ht = hash_table_new();
+  assert(ht != NULL);
+
+  /* The bucket allocation succeeds, the hnode wrapper allocation fails. */
+  fail_allocation_after(1);
+  hash_table_insert(ht, &value, FIRST_KEY);
+  stop_failing_allocations();
+
+  linked_list *bucket = (linked_list *)ht[hash(FIRST_KEY)];
+  assert(bucket != NULL);
+  assert(ll_prop(bucket, length) == 0);
+  assert(hash_table_search(ht, FIRST_KEY) == NULL);
+  assert(outstanding_allocations == 2);
+
+  hash_table_free(ht);
+  assert_no_outstanding_allocations();
+  assert(value == 11);
+}
+
+static void test_insert_oom_on_list_node_allocation(void) {
+  int value = 11;
+  hash_table ht = hash_table_new();
+  assert(ht != NULL);
+
+  /* Bucket and hnode allocations succeed, the list node allocation fails. */
+  fail_allocation_after(2);
+  hash_table_insert(ht, &value, FIRST_KEY);
+  stop_failing_allocations();
+
+  linked_list *bucket = (linked_list *)ht[hash(FIRST_KEY)];
+  assert(bucket != NULL);
+  assert(ll_prop(bucket, length) == 0);
+  assert(hash_table_search(ht, FIRST_KEY) == NULL);
+  /* Only the table and the empty bucket remain: the hnode wrapper was freed. */
+  assert(outstanding_allocations == 2);
+
+  hash_table_free(ht);
+  assert_no_outstanding_allocations();
+  assert(value == 11);
+}
+
 int main(void) {
   test_free_null_table();
   test_new_and_free_empty_table();
@@ -221,5 +345,11 @@ int main(void) {
   test_delete_existing_key();
   test_delete_missing_key();
   test_delete_from_null_table();
+  test_insert_null_table();
+  test_search_null_table();
+  test_print_null_table();
+  test_insert_oom_on_bucket_allocation();
+  test_insert_oom_on_hnode_allocation();
+  test_insert_oom_on_list_node_allocation();
   return 0;
 }
