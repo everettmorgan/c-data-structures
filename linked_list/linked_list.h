@@ -3,14 +3,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 #ifndef LINKED_LIST
+#define LINKED_LIST
 
 #include "linked_list.c"
 
 #ifndef LL_DISABLE_ALIASES
 
-#define singly_ll linked_list_new(0)
-#define doubly_ll linked_list_new(1)
-#define circly_ll linked_list_new(2)
+#define singly_ll linked_list_new(LINKED_LIST_SINGLY)
+#define doubly_ll linked_list_new(LINKED_LIST_DOUBLY)
+#define circly_ll linked_list_new(LINKED_LIST_CIRCULAR)
 
 #ifdef LL_ENABLE_SHRTHND
   #define ll_find(__v) ll_find(ll, __v)
@@ -60,25 +61,27 @@
 
 #else
 
+linked_list_allocator linked_list_default_allocator(void);
+
 linked_list *linked_list_new(int type);
+linked_list *linked_list_new_with_allocator(int type, linked_list_allocator allocator);
 
-node *linked_list_node_new(void * d);
+node *linked_list_node_new(void *d);
+node *linked_list_node_new_with_allocator(void *d, const linked_list_allocator *allocator);
 
-node *linked_list_find(linked_list * ll, void * v);
+int linked_list_is_empty(linked_list *ll);
+node *linked_list_find(linked_list *ll, void *v);
+int linked_list_insert(linked_list *ll, void *d);
+int linked_list_delete(linked_list *ll, node *n);
+int linked_list_delete_singly(linked_list *ll, node *n);
+int linked_list_delete_doubly(linked_list *ll, node *n);
+int linked_list_delete_circly(linked_list *ll, node *n);
+int linked_list_delete_value(linked_list *ll, void *v);
 
-void linked_list_insert(linked_list * ll, void * d);
-
-int linked_list_delete(linked_list * ll, node * n);
-
-int linked_list_delete_value(linked_list * ll, void * v);
-
-void linked_list_compare_fn(linked_list * ll, void( * cmp ));
-
-void linked_list_equality_fn(linked_list * ll, void( * equal ));
-
-void linked_list_free(linked_list * ll);
-
-void linked_list_print(linked_list * ll);
+void linked_list_compare_fn(linked_list *ll, void *cmp);
+void linked_list_equality_fn(linked_list *ll, void *equal);
+void linked_list_free(linked_list *ll);
+void linked_list_print(linked_list *ll);
 
 #endif // LL_DISABLE_ALIASES
 
