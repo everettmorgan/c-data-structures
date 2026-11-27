@@ -28,5 +28,7 @@ int main() {
         printf("found %c at %p\n", *(char *)n->data, n);
     }
 
+    hash_table_free(ht);
+
     return 0;
 }
