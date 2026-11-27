@@ -22,6 +22,8 @@
 
 stack * stack_new(int max_length);
 
+stack * stack_new_with_allocator(int max_length, linked_list_allocator allocator);
+
 int stack_push(stack * stk, void * data);
 
 int stack_pop(stack * stk);

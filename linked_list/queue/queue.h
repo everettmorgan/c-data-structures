@@ -5,6 +5,7 @@
 #include "./queue.c"
 
 queue * queue_new(int max_length);
+queue * queue_new_with_allocator(int max_length, linked_list_allocator allocator);
 int queue_enqueue(queue * q, void * d);
 int queue_dequeue(queue * q);
 node * queue_peek(queue * q);
