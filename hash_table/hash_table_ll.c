@@ -34,18 +34,32 @@ hash_table hash_table_new() {
 }
 
 void hash_table_insert(hash_table ht, void * d, int key) {
+    if (ht == NULL) {
+        return;
+    }
     int ll = hash(key);
     if (ht[ll] == NULL) {
       ht[ll] = ll_new(0);
+      if (ht[ll] == NULL) {
+          return;
+      }
       ll_eq_fn(ht[ll], hnode_key_equality);
     }
     hnode * hn = malloc(sizeof(hnode));
+    if (hn == NULL) {
+        return;
+    }
     hn->data = d;
     hn->key = key;
-    ll_insert(ht[ll], hn);
+    if (ll_insert(ht[ll], hn) != LINKED_LIST_OK) {
+        free(hn);
+    }
 }
 
 hnode * hash_table_search(hash_table ht, int key) {
+  if (ht == NULL) {
+      return NULL;
+  }
   if (retrieve(key)) {
       node * n = ll_find(ht[hash(key)], &key);
       if (n != NULL) {
@@ -93,6 +107,9 @@ void hash_table_free(hash_table ht) {
 }
 
 void hash_table_print(hash_table ht) {
+  if (ht == NULL) {
+      return;
+  }
   for (int i = 0; i < HASH_TABLE_SIZE; i++) {
     if (ht[i] != NULL) {
         printf("--++--\n");
