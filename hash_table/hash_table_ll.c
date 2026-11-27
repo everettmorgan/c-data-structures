@@ -56,13 +56,40 @@ hnode * hash_table_search(hash_table ht, int key) {
 }
 
 void hash_table_delete(hash_table ht, int key) {
+    if (ht == NULL) {
+        return;
+    }
     int ll = hash(key);
     if (ht[ll] != NULL) {
         node * n = ll_find(ht[ll], &key);
         if (n != NULL) {
-            ll_del(ht[ll], n);
+            hnode * hn = (hnode *)(n->data);
+            /* The node must leave the list before its wrapper is released. */
+            if (ll_del(ht[ll], n) == LINKED_LIST_OK) {
+                free(hn);
+            }
         }
     }
+}
+
+void hash_table_free(hash_table ht) {
+    if (ht == NULL) {
+        return;
+    }
+    for (int i = 0; i < HASH_TABLE_SIZE; i++) {
+        linked_list * ll = (linked_list *)ht[i];
+        if (ll == NULL) {
+            continue;
+        }
+        /* The table owns the hnode wrappers, but not the values they point at. */
+        node * current = ll->head;
+        for (int j = 0; j < ll->length && current != NULL; j++) {
+            free(current->data);
+            current = current->next;
+        }
+        ll_free(ll);
+    }
+    free(ht);
 }
 
 void hash_table_print(hash_table ht) {
